@@ -1,0 +1,90 @@
+{
+  "name": "charge-bar",
+  "version": "0.0.8",
+  "description": "versioning .csproj files in projects under a .NET Standard solution",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "dotver": "./src/script.js"
+  },
+  "scripts": {
+    "upint": "yarn upgrade-interactive --latest",
+    "build": "rollup -c rollup.config.js"
+  },
+  "dependencies": {
+    "@aryth/math": "^0.3.26",
+    "@typen/enum-data-types": "^0.1.17",
+    "@palett/cards": "^0.8.18",
+    "@palett/dye-factory": "^0.8.18",
+    "@palett/dye": "^0.8.18",
+    "@palett/presets": "^0.8.18",
+    "@palett/projector-factory": "^0.8.18",
+    "@spare/logger": "^0.12.4",
+    "@texting/lange": "^0.0.13",
+    "@typen/nullish": "^0.1.17",
+    "@valjoux/timestamp": "^0.3.7"
+  },
+  "devDependencies": {
+    "@aryth/flopper": "^0.3.26",
+    "@aryth/math": "^0.3.26",
+    "@aryth/rand": "^0.3.26",
+    "@babel/core": "^7.16.0",
+    "@babel/node": "^7.16.0",
+    "@babel/plugin-proposal-class-properties": "^7.16.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.16.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.16.0",
+    "@babel/plugin-proposal-private-methods": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.4",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/register": "^7.12.1",
+    "@babel/runtime": "^7.12.5",
+    "@geia/contractor": "^0.1.0",
+    "@palett/cards": "^0.8.18",
+    "@palett/dye": "^0.8.18",
+    "@palett/dye-factory": "^0.8.18",
+    "@palett/presets": "^0.8.18",
+    "@palett/projector-factory": "^0.8.18",
+    "@rollup/plugin-babel": "^5.2.1",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@spare/deco-date": "^0.12.4",
+    "@spare/logger": "^0.12.4",
+    "@texting/lange": "^0.0.13",
+    "@typen/enum-data-types": "^0.1.17",
+    "@typen/nullish": "^0.1.17",
+    "@valjoux/timeout": "^0.3.7",
+    "@valjoux/timestamp-pretty": "^0.3.7",
+    "@vect/vector-init": "^0.4.9",
+    "axios": "^0.24.0",
+    "puppeteer": "^11.0.0",
+    "rollup": "^2.32.1",
+    "rollup-plugin-fileinfo": "^0.2.4",
+    "through2": "^4.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoyeungw/charge-bar.git"
+  },
+  "keywords": [
+    "rollup-plugin",
+    "rollup",
+    "filesizes"
+  ],
+  "engines": {
+    "node": ">=8.x"
+  },
+  "author": {
+    "name": "Hoyeung Wong",
+    "email": "hoyeungw@outlook.com",
+    "url": "https://github.com/hoyeungw"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hoyeungw/charge-bar.git"
+  },
+  "homepage": "https://github.com/hoyeungw/charge-bar#readme"
+}
