@@ -1,7 +1,7 @@
 .idea
 yarn.lock
 archive
-
+dist
 node_modules
 #src
 #test
