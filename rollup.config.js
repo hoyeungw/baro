@@ -26,8 +26,11 @@ export default [
         sourceMap: true,
         exclude: 'node_modules/**',
         babelHelpers: 'bundled',
+        presets : [
+          ['@babel/preset-env', { targets: { node: '16' } }]
+        ],
         plugins: [
-          ['@babel/transform-runtime', { helpers: false }],
+          // ['@babel/transform-runtime', { helpers: false }],
           // ['@babel/plugin-proposal-class-properties'],
           // ['@babel/plugin-proposal-private-methods'],
           ['@babel/plugin-proposal-optional-chaining'],
