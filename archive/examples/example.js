@@ -77,7 +77,7 @@ function Example2(onComplete){
 
 function Example3(onComplete){
     // EXAMPLE 3 ---------------------------------------------
-    console.log('\nExample 3 - Stop the BarAgency Automatically');
+    console.log('\nExample 3 - Stop the Baro Automatically');
     // create new progress bar using default values
     const b3 = new _progress.Bar({
         autoStop: true,

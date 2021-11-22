@@ -1,15 +1,12 @@
 {
   "name": "baro",
-  "version": "0.0.8",
-  "description": "versioning .csproj files in projects under a .NET Standard solution",
+  "version": "0.0.1",
+  "description": "a command-line progress-bar",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "files": [
     "dist"
   ],
-  "bin": {
-    "dotver": "./src/script.js"
-  },
   "scripts": {
     "upint": "yarn upgrade-interactive --latest",
     "build": "rollup -c rollup.config.js"
@@ -77,7 +74,7 @@
     "filesizes"
   ],
   "engines": {
-    "node": ">=8.x"
+    "node": ">=16"
   },
   "author": {
     "name": "Hoyeung Wong",

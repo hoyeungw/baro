@@ -1,19 +1,13 @@
-import { BarFactory }       from './src/BarFactory'
-import { formatBar }        from './src/formatters/format-bar'
-import { formatTime }       from './src/formatters/format-time'
-import { formatValue }      from './src/formatters/format-value'
-import { defaultFormatter } from './src/formatters/formatter'
-import { ParallelBar }      from './src/ParallelBar'
-import { Presets }          from './src/presets'
-import { ProgressBar }      from './src/ProgressBar'
+export { Layout } from './src/Layout'
+export { Config } from './src/Config'
+export { State }  from './src/State'
+export { Baro }   from './src/Baro'
+export { Escape } from './util/Escape'
+export { ETA }    from './util/ETA'
 
-export { Presets }
-export { ParallelBar }
-export { BarFactory }
-export { ProgressBar }
-export const Format = {
-  Formatter: defaultFormatter,
-  BarFormat: formatBar,
-  ValueFormat: formatValue,
-  TimeFormat: formatTime
-}
+// export const Format = {
+//   Formatter: defaultFormatter,
+//   BarFormat: formatBar,
+//   ValueFormat: formatValue,
+//   TimeFormat: formatTime
+// }
