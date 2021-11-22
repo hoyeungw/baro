@@ -2,10 +2,16 @@ import readline from 'readline'
 
 // low-level terminal interactions
 export class Terminal {
+  stream = null
+  /** @type {boolean} line wrapping enabled */
+  lineWrap = true
+  /** @type {number} current, relative y position */
+  dy = 0
+
 
   /**
    *
-   * @param {Object} configs
+   * @param {Config|object} configs
    * @param {node::WriteStream} configs.stream
    * @param {boolean} [configs.lineWrap]
    * @param {number} [configs.dy]
@@ -13,13 +19,8 @@ export class Terminal {
    */
   constructor(configs) {
     this.stream = configs.stream
-
-    // default: line wrapping enabled
     this.lineWrap = configs.lineWrap ?? true
-
-    // current, relative y position
     this.dy = configs.dy ?? 0
-    // Xr().isTTY(this.isTTY).width(this.width) |> says['terminal']
   }
 
   // tty environment ?
@@ -27,63 +28,60 @@ export class Terminal {
 
   // get terminal width
   get width() {
-    // set max width to 80 in tty-mode and 200 in notty-mode
-    return this.stream.columns || ( this.stream.isTTY ? 80 : 200 )
+    return this.stream.columns ?? ( this.stream.isTTY ? 80 : 200 ) // set max width to 80 in tty-mode and 200 in noTTY-mode
   }
 
   // write content to output stream
   // @TODO use string-width to strip length
   write(tx) {
-    this.stream.write(this.lineWrap ? tx.slice(0, this.width) : tx)
+    this.stream.write(tx) // this.stream.write(this.lineWrap ? tx.slice(0, this.width) : tx)
+  }
+
+  cleanWrite(tx) {
+    this.cursorTo(0, null)  // set cursor to start of line
+    this.stream.write(tx)    // write output
+    this.clearRight()            // clear to the right from cursor
   }
 
   // save cursor position + settings
-  cursorSave() {
+  saveCursor() {
     if (!this.isTTY) return void 0
-    // save position
-    this.stream.write('\x1B7')
+    this.stream.write('\x1B7') // save position
   }
 
   // restore last cursor position + settings
-  cursorRestore() {
+  restoreCursor() {
     if (!this.isTTY) return void 0
-    // restore cursor
-    this.stream.write('\x1B8')
+    this.stream.write('\x1B8') // restore cursor
   }
 
   // show/hide cursor
-  cursor(enabled) {
+  showCursor(enabled) {
     if (!this.isTTY) return void 0
     enabled
       ? this.stream.write('\x1B[?25h')
       : this.stream.write('\x1B[?25l')
   }
 
-  // change cursor positionn
-  cursorTo(x = null, y = null) {
+  // change cursor position
+  cursorTo(x, y) {
     if (!this.isTTY) return void 0
-    // move cursor absolute
-    readline.cursorTo(this.stream, x, y)
+    readline.cursorTo(this.stream, x, y) // move cursor absolute
   }
 
   // change relative cursor position
-  cursorRelative(dx = null, dy = null) {
+  moveCursor(dx, dy) {
     if (!this.isTTY) return void 0
-    // store current position
-    this.dy = this.dy + dy
-    // move cursor relative
-    readline.moveCursor(this.stream, dx, dy)
+    if (dy) this.dy += dy // store current position
+    if (dx || dy) readline.moveCursor(this.stream, dx, dy) // move cursor relative
   }
 
-  // relative reset
-  cursorRelativeReset() {
+  // reset relative cursor
+  resetCursor() {
     if (!this.isTTY) return void 0
-    // move cursor to initial line
-    readline.moveCursor(this.stream, 0, -this.dy)
-    // first char
-    readline.cursorTo(this.stream, 0, null)
-    // reset counter
-    this.dy = 0
+    readline.moveCursor(this.stream, 0, -this.dy) // move cursor to initial line
+    readline.cursorTo(this.stream, 0, null) // first char
+    this.dy = 0 // reset counter
   }
 
   // clear to the right from cursor
@@ -98,8 +96,8 @@ export class Terminal {
     readline.clearLine(this.stream, 0)
   }
 
-  // clear everyting beyond the current line
-  clearBottom() {
+  // clear everything beyond the current line
+  clearDown() {
     if (!this.isTTY) return void 0
     readline.clearScreenDown(this.stream)
   }
@@ -111,10 +109,9 @@ export class Terminal {
   }
 
   // control line wrapping
-  lineWrapping(enabled) {
+  setLineWrap(enabled) {
     if (!this.isTTY) return void 0
-    // store state
-    this.lineWrap = enabled
+    this.lineWrap = enabled // store state
     enabled
       ? this.stream.write('\x1B[?7h')
       : this.stream.write('\x1B[?7l')

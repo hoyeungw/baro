@@ -1,71 +1,52 @@
-
 // ETA calculation
-export class ETA{
+export class ETA {
 
-    constructor(length, initTime, initValue){
-        // size of eta buffer
-        this.etaBufferLength = length || 100;
+  constructor(capacity, initTime, initValue) {
+    // size of eta buffer
+    this.capacity = capacity || 100
+    // eta buffer with initial values
+    this.valueSeries = [ initValue ]
+    this.timeSeries = [ initTime ]
 
-        // eta buffer with initial values
-        this.valueBuffer = [initValue];
-        this.timeBuffer = [initTime];
+    // eta time value
+    this.eta = '0'
+  }
 
-        // eta time value
-        this.eta = '0';
-    }
+  // add new values to calculation buffer
+  update(time, { value, total }) {
+    this.valueSeries.push(value)
+    this.timeSeries.push(time)
+    // trigger recalculation
+    this.calculate(total - value)
+  }
 
-    // add new values to calculation buffer
-    update(time, value, total){
-        this.valueBuffer.push(value);
-        this.timeBuffer.push(time);
+  // fetch estimated time
+  get value() { return this.eta }
 
-        // trigger recalculation
-        this.calculate(total-value);
-    }
+  // eta calculation - request number of remaining events
+  calculate(remaining) {
+    // get number of samples in eta buffer
+    const consumed = this.valueSeries.length
+    const gap = Math.min(this.capacity, consumed)
 
-    // fetch estimated time
-    getTime(){
-        return this.eta;
-    }
+    const dValue = this.valueSeries[consumed - 1] - this.valueSeries[consumed - gap]
+    const dTime = this.timeSeries[consumed - 1] - this.timeSeries[consumed - gap]
 
-    // eta calculation - request number of remaining events
-    calculate(remaining){
-        // get number of samples in eta buffer
-        const currentBufferSize = this.valueBuffer.length;
-        const buffer = Math.min(this.etaBufferLength, currentBufferSize);
+    // get progress per ms
+    const marginalRate = dValue / dTime
 
-        const v_diff = this.valueBuffer[currentBufferSize - 1] - this.valueBuffer[currentBufferSize - buffer];
-        const t_diff = this.timeBuffer[currentBufferSize - 1] - this.timeBuffer[currentBufferSize - buffer];
+    // strip past elements
+    this.valueSeries = this.valueSeries.slice(-this.capacity)
+    this.timeSeries = this.timeSeries.slice(-this.capacity)
 
-        // get progress per ms
-        const vt_rate = v_diff/t_diff;
+    // eq: vt_rate *x = total
+    const eta = Math.ceil(remaining / marginalRate / 1000)
 
-        // strip past elements
-        this.valueBuffer = this.valueBuffer.slice(-this.etaBufferLength);
-        this.timeBuffer  = this.timeBuffer.slice(-this.etaBufferLength);
-
-        // eq: vt_rate *x = total
-        const eta = Math.ceil(remaining/vt_rate/1000);
-
-        // check values
-        if (isNaN(eta)){
-            this.eta = 'NULL';
-
-        // +/- Infinity --- NaN already handled
-        }else if (!isFinite(eta)){
-            this.eta = 'INF';
-
-        // > 10M s ? - set upper display limit ~115days (1e7/60/60/24)
-        }else if (eta > 1e7){
-            this.eta = 'INF';
-
-        // negative ?
-        }else if (eta < 0){
-            this.eta = 0;
-
-        }else{
-            // assign
-            this.eta = eta;
-        }
-    }
+    // check values
+    return this.eta = isNaN(eta) ? 'NULL'
+      : !isFinite(eta) ? 'INF'  // +/- Infinity --- NaN already handled
+        : eta > 1e7 ? 'INF'  // > 10M s ? - set upper display limit ~115days (1e7/60/60/24)
+          : eta < 0 ? 0  // negative ?
+            : eta  // assign
+  }
 }
