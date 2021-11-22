@@ -1,4 +1,4 @@
-# charge-bar
+# baro
 
 [![npm version][badge-npm-version]][url-npm]
 [![npm download monthly][badge-npm-download-monthly]][url-npm]
@@ -10,19 +10,19 @@
 [![github commit total][badge-github-commit-count]][url-github]
 
 [//]: <> (Shields)
-[badge-npm-version]: https://flat.badgen.net/npm/v/charge-bar
-[badge-npm-download-monthly]: https://flat.badgen.net/npm/dm/charge-bar
-[badge-npm-download-total]:https://flat.badgen.net/npm/dt/charge-bar
-[badge-npm-dependents]: https://flat.badgen.net/npm/dependents/charge-bar
-[badge-npm-license]: https://flat.badgen.net/npm/license/charge-bar
-[badge-pp-install-size]: https://flat.badgen.net/packagephobia/install/charge-bar
-[badge-github-last-commit]: https://flat.badgen.net/github/last-commit/hoyeungw/charge-bar
-[badge-github-commit-count]: https://flat.badgen.net/github/commits/hoyeungw/charge-bar
+[badge-npm-version]: https://flat.badgen.net/npm/v/baro
+[badge-npm-download-monthly]: https://flat.badgen.net/npm/dm/baro
+[badge-npm-download-total]:https://flat.badgen.net/npm/dt/baro
+[badge-npm-dependents]: https://flat.badgen.net/npm/dependents/baro
+[badge-npm-license]: https://flat.badgen.net/npm/license/baro
+[badge-pp-install-size]: https://flat.badgen.net/packagephobia/install/baro
+[badge-github-last-commit]: https://flat.badgen.net/github/last-commit/hoyeungw/baro
+[badge-github-commit-count]: https://flat.badgen.net/github/commits/hoyeungw/baro
 
 [//]: <> (Link)
-[url-npm]: https://npmjs.org/package/charge-bar
-[url-pp]: https://packagephobia.now.sh/result?p=charge-bar
-[url-github]: https://github.com/hoyeungw/charge-bar
+[url-npm]: https://npmjs.org/package/baro
+[url-pp]: https://packagephobia.now.sh/result?p=baro
+[url-github]: https://github.com/hoyeungw/baro
 
 ##### A rollup plugin to show bundle size
 
@@ -33,9 +33,9 @@
 #### Install
 ```console
 # via npm
-npm install -d charge-bar
+npm install -d baro
 # or via yarn
-yarn global add charge-bar
+yarn global add baro
 ```
 
 #### Usage
