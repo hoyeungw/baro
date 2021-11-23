@@ -3,7 +3,7 @@ import { Deco, decoString, logger, says, Xr } from '@spare/logger'
 import { timeout }                            from '@valjoux/timeout'
 import { time }                               from '@valjoux/timestamp-pretty'
 import { range }                from '@vect/vector-init'
-import { Layouts, ProgressBar } from '../index'
+import { Layouts, ProgressBar } from '../../index'
 
 
 const test = async () => {

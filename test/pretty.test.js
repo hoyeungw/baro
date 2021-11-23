@@ -4,71 +4,67 @@ import { ProjectorFactory }                        from '@palett/projector-facto
 import { deco, decoString, logger, ros, says, Xr } from '@spare/logger'
 import { timeout }                                 from '@valjoux/timeout'
 import { time }                                    from '@valjoux/timestamp-pretty'
-import { range } from '@vect/vector-init'
-import { Baro }  from '../src/Baro'
+import { range }                                   from '@vect/vector-init'
+import { Baro }                                    from '../src/Baro'
 
 const projectorFactory = ProjectorFactory.fromHEX({ min: 0, max: 1 }, FRESH)
 
-export class BarFactory {
-  static build() {
-    return Baro.build(
-      {
-        autoClear: false,
-        lineWrap: null,
-        hideCursor: true,
-        stream: process.stdout,
-        // forceRedraw: true,
-        eta: {},
-        fps: 2,
-        etaAutoUpdate: true,
-        syncUpdate: true,
-      },
-      {
-        sentence: ' {bar} {progress}% | ETA: {eta}s | {degree}',
-        char: [ '\u2588', '\u2591' ],
-        size: 10,
-        autoZero: true,
-        formatter(state) {
-          const { progress, total, value, payload, eta } = state
-          // Xr().state(state |> decoFlat).progress(state.progress) |> logger
-          const { start, agent, topic, status } = payload
-          const dye = projectorFactory.make(progress)
-          const barChars = this.bar.call(this, state) // ( getBarChars.call(config, progress) )
-          const advance = this.degree.call(this, state)
-
-          const bar = dye(barChars + ' ' + advance)
-          if (value < total) {
-            return `${start} [${ros(agent)}] ${bar} | eta ${eta} |${topic}`
-          }
-          else {
-            return `${start} [${ros(agent)}] ${bar} | ${topic}`
-          }
-        },
-      }
-    )
-  }
+const BARO_CONFIG = {
+  autoClear: false,
+  lineWrap: null,
+  hideCursor: true,
+  stream: process.stdout,
+  // forceRedraw: true,
+  eta: {},
+  fps: 12,
+  syncUpdate: true,
 }
+
+const BARO_LAYOUT = {
+  sentence: ' {bar} {progress}% | ETA: {eta}s | {degree}',
+  char: [ '\u2588', '\u2591' ],
+  size: 10,
+  autoZero: true,
+  formatter(state) {
+    const { progress, total, value, payload, eta } = state
+    // Xr().state(state |> decoFlat).progress(state.progress) |> logger
+    const { start, agent, topic, status } = payload
+    const dye = projectorFactory.make(progress)
+    const barText = this.bar.call(this, state) // ( getBarChars.call(config, progress) )
+    const degreeText = this.degree.call(this, state)
+    const bar = dye(barText + ' ' + degreeText)
+    if (value < total) {
+      return `${start} [${ros(agent)}] ${bar} | eta ${eta} |${topic}`
+    }
+    else {
+      return `${start} [${ros(agent)}] ${bar} | ${topic}`
+    }
+  },
+}
+
+const baro = Baro.build(BARO_CONFIG, BARO_LAYOUT)
 
 const test = async () => {
   Xr()['process.stdout.isTTY'](process.stdout.isTTY) |> logger
-  const barFactory = BarFactory.build()
   // multiBar.config |> Deco({depth:1}) |> logger
   const service = async function (params) {
     const { agent } = this
     const { status, delay, topic, size, } = params
     const start = time()
     const payload = { start, agent, topic, delay, status }
-    const state = barFactory.create(size, 0, payload)
+    const state = baro.create(size, 0, payload)
     await timeout(delay)
     if (status === 404) {
-      barFactory.remove(state)
+      // baro.remove(state)
       return payload
     }
     for (const i of range(0, 11)) {
       await timeout(200)
       state.update(i * size / 10, payload)
     }
+    state.done = true
     state.stop()
+    // state.spin.logs |> decoMatrix |> says['state-logs']
     return payload
   }
   const contractor = Contractor.build(service, [ { agent: '006' }, { agent: '007' }, { agent: '008' } ])
@@ -83,7 +79,7 @@ const test = async () => {
     { status: 200, topic: 'ion', size: 1600000, delay: 100 },
   ]
   const results = await contractor.takeOrders(jobs)
-  barFactory.stop()
+  baro.stop()
   // await timeout(100)
   results |> deco |> says['Q'].p('mission accomplished')
   'well done' |> decoString |> says['M']
