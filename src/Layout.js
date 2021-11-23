@@ -27,16 +27,17 @@ export class Layout {
     if (options.bar) this.bar = options.bar.bind(this)
     if (options.degree) this.degree = options.degree.bind(this)
     if (options.formatter) this.formatter = options.formatter.bind(this)
-
   }
 
   static build(options) {
     return new Layout(options)
   }
+
   loadFormatter(formatter) {
     this.formatter = formatter.bind(this)
     return this
   }
+
   bar(state) {
     const { progress } = state
     const { chars, glue, size } = this
@@ -47,6 +48,10 @@ export class Layout {
     // generate bar string by stripping the pre-rendered strings
     return x.slice(0, lenX) + glue + y.slice(0, lenY)
   }
+
+  get fullBar() { return this.chars[0].slice(0, this.size) }
+  get zeroBar() { return this.chars[1].slice(0, this.size) }
+
   degree(state) {
     let { value, total } = state
     const { base3 = true, decimal = true } = this
@@ -72,7 +77,10 @@ export class Layout {
     return this.sentence?.replace(/\{(\w+)\}/g, (match, key) => {
       if (key === 'bar') return this.bar(state)
       if (key === 'degree') return this.degree(state)
-      return key in state ? state[key] : match
+      if (key in state) return state[key]
+      const payload = state.payload
+      if (payload && key in payload) return payload[key]
+      return match
     })
   }
 }
