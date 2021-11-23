@@ -3,14 +3,6 @@ import { valid }             from '@typen/nullish'
 import { ETA }               from '../util/ETA'
 
 export class State {
-  /** @type {number} the current bar value */
-  value = 0
-  /** @type {number} the end value of the bar */
-  total = 100
-  /** @type {?number} start time (used for eta calculation) */
-  start = null
-  /** @type {?number} stop time (used for duration calculation) */
-  end = null
   constructor(total, value, payload, eta) {
     this.value = value ?? 0
     this.total = total ?? 100
