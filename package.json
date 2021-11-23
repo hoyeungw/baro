@@ -1,6 +1,6 @@
 {
   "name": "baro",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "a command-line progress-bar",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -69,9 +69,14 @@
     "url": "git+https://github.com/hoyeungw/baro.git"
   },
   "keywords": [
-    "rollup-plugin",
-    "rollup",
-    "filesizes"
+    "bar",
+    "progress-bar",
+    "throbber",
+    "loading-icon",
+    "term-ui",
+    "terminal-interface",
+    "tui",
+    "ascii"
   ],
   "engines": {
     "node": ">=16"
