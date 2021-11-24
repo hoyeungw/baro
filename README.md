@@ -246,9 +246,9 @@ The following config can be updated
 - `barGlue` (type:string) - a "glue" string between the complete and incomplete bar elements used to insert ascii control sequences for colorization (default: empty) - Note: in case you add visible "glue" characters the barSize will be increased by the length of the glue!
 - `autoPadding` (type: boolean) - add padding chars to formatted time and progress to force fixed width (default: false) - Note: handled standard format functions!
 - `padChar` (type: string) - the character sequence used for autoPadding (default: "   ") - Note: due to performance optimizations this value requires a length of 3 identical chars
-- `barChars` (type: function) - a custom bar formatter function which renders the bar-element (default: [format-bar.js](lib/format-bar.js))
-- `formatTime` (type: function) - a custom timer formatter function which renders the formatted time elements like `eta_formatted` and `duration-formatted` (default: [format-time.js](lib/format-time.js))
-- `formatValue` (type: function) - a custom value formatter function which renders all other values (default: [format-value.js](lib/format-value.js))
+- `barChars` (type: function) - a custom bar format function which renders the bar-element (default: [format-bar.js](lib/format-bar.js))
+- `formatTime` (type: function) - a custom timer format function which renders the formatted time elements like `eta_formatted` and `duration-formatted` (default: [format-time.js](lib/format-time.js))
+- `formatValue` (type: function) - a custom value format function which renders all other values (default: [format-value.js](lib/format-value.js))
 
 Events
 -----------------------------------
@@ -288,13 +288,13 @@ progress [========================================] 100% | ETA: 0s | 200/200
 Custom formatters
 -----------------------------------
 
-Instead of a "static" format string it is also possible to pass a custom callback function as formatter.
-For a full example (including params) take a look on `lib/formatter.js`
+Instead of a "static" format string it is also possible to pass a custom callback function as format.
+For a full example (including params) take a look on `lib/format.js`
 
 ### Example 1 ###
 
 ```js
-function formatter(config, params, payload){
+function format(config, params, payload){
 
     // bar grows dynamically by current progress - no whitespaces are added
     const bar = config.barCompleteString.substr(0, Math.round(params.progress*config.barSize));
@@ -309,7 +309,7 @@ function formatter(config, params, payload){
 }
 
 const opt = {
-    format: formatter
+    format: format
 }
 ```
 
@@ -324,7 +324,7 @@ is rendered as
 
 ### Example 2 ###
 
-You can also access the default format functions to use them within your formatter:
+You can also access the default format functions to use them within your format:
 
 ```js
 const {TimeFormat, ValueFormat, BarFormat, Formatter} = require('cli-progess').Format;

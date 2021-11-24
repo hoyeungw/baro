@@ -54,5 +54,4 @@ export class Config {
   }
 
   static build(config) { return new Config(config) }
-
 }

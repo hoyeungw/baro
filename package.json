@@ -1,6 +1,6 @@
 {
   "name": "baro",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "a command-line progress-bar",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",

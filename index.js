@@ -1,10 +1,11 @@
-export { Layout } from './src/Layout'
-export { Config } from './src/Config'
-export { State }  from './src/State'
-export { Baro }   from './src/Baro'
-export { Escape } from './util/Escape'
-export { ETA }    from './util/ETA'
-export { Spin }   from './util/Spin'
+export { Layout }                                      from './src/Layout'
+export { Config }                                      from './src/Config'
+export { State }                                       from './src/State'
+export { Baro }                                        from './src/Baro'
+export { Escape }                                      from './util/Escape'
+export { ETA }                                         from './util/ETA'
+export { Spin }                                        from './util/Spin'
+export { CHARSET_SHADE, CHARSET_RECT, CHARSET_LEGACY } from './resources/charset'
 // export const Format = {
 //   Formatter: defaultFormatter,
 //   BarFormat: formatBar,
