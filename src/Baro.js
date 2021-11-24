@@ -12,8 +12,8 @@ export class Baro {
   terminal
   /** @type {boolean} progress bar active ? */
   active = false
-  /** @type {function} use default formatter or custom one ? */
-  formatter
+  /** @type {function} use default format or custom one ? */
+  format
   /** @type {[State]}  */
   states
 
@@ -64,7 +64,7 @@ export class Baro {
   create(total, value, payload) {
     // progress updates are only visible in TTY mode!
     if (this.noTTY) return void 0
-    const state = new State(total, value, payload, true)
+    const state = new State(total, value, payload, this.config.eta)
     state.last = Number.NEGATIVE_INFINITY
     this.states.push(state)
     if (!this.escape.active && this.states.length) this.boot()
@@ -100,7 +100,7 @@ export class Baro {
     for (let i = 0, hi = states.length; i < hi; i++) {
       const state = states[i] // update each bar
       if (this.forceRedraw || ( state.value !== state.last )) {
-        this.terminal.cleanWrite(this.layout.formatter(state))
+        this.terminal.cleanWrite(this.layout.format(state))
       } // string updated, only trigger redraw on change
       this.terminal.newline()
       state.last = state.value
