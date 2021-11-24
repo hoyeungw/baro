@@ -5,10 +5,19 @@ export const trailZero = (num) => {
   const tx = '' + roundD2(num)
   let i = tx.indexOf('.')
   if (!~i) { return tx + '.00' }
-  let df = tx.length - i
-  if (df === 3) { return tx }
-  if (df === 2) { return tx + '0' }
-  if (df === 1) { return tx + '00' }
+  const trail = tx.length - i
+  if (trail === 3) { return tx }
+  if (trail === 2) { return tx + '0' }
+  if (trail === 1) { return tx + '00' }
+  return tx
+}
+
+export const pad3 = (tx) => {
+  const len = tx.length
+  if (len === 3) { return tx }
+  if (len === 2) { return ' ' + tx }
+  if (len === 1) { return '  ' + tx }
+  if (len === 0) { return '   ' }
   return tx
 }
 
