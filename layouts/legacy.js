@@ -1,7 +1,7 @@
 // baro legacy style as of 1.x
-import { LEGACY_CHARSET } from '../resources/chars'
+import { CHARSET_LEGACY } from '../resources/charset'
 
 export const layout = {
   sentence: 'progress [{bar}] {progress}% | ETA: {eta}s | {degree}',
-  char: LEGACY_CHARSET,
+  char: CHARSET_LEGACY,
 }

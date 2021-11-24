@@ -1,9 +1,9 @@
-import { SHADE_CHARSET } from '../resources/chars'
+import { CHARSET_SHADE } from '../resources/charset'
 import { Spin }          from '../util/Spin'
 
 export const layout = {
   sentence: `{start} {bar} | {degree}`,
-  char: SHADE_CHARSET,
+  char: CHARSET_SHADE,
   size: 12,
   autoZero: true,
   bar(state) {

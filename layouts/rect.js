@@ -1,6 +1,6 @@
-import { RECT_CHARSET } from '../resources/chars'
+import { CHARSET_RECT } from '../resources/charset'
 
 export const layout = {
   sentence: ' {bar}\u25A0 {progress}% | ETA: {eta}s | {degree}',
-  char: RECT_CHARSET
+  char: CHARSET_RECT
 }
