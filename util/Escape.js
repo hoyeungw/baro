@@ -8,7 +8,6 @@ export class Escape {
     this.fn = conf.fn.bind(this.ctx, this.arg)
     this.instant = conf.instant ?? true
     this.timer = null
-    this.logs = []
   }
 
   static build(conf) { return new Escape(conf) }
@@ -18,13 +17,8 @@ export class Escape {
   loop(ms) {
     if (typeof this.timer === OBJ) this.stop()
     if (!this.fn) return void 0
-    const func = () => {
-      this.fn()
-      this.logs.push(this.arg.map(state => state.eta))
-    }
-    if (this.instant) func()
-
-    this.timer = setInterval(func, ms)
+    if (this.instant) this.fn()
+    this.timer = setInterval(this.fn, ms)
   }
 
   stop() {
