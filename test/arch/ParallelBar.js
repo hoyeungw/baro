@@ -108,10 +108,10 @@ export class ParallelBar extends EventEmitter {
     // trigger event
     this.emit('redraw-pre')
 
-    const formatter = this.layout.formatter.bind(this.layout)
+    const format = this.layout.format.bind(this.layout)
     // update each bar
     for (let i = 0; i < this.bars.length; i++) {
-      this.bars[i].render(formatter, this.payloads[i])
+      this.bars[i].render(format, this.payloads[i])
       this.terminal.newline()
     }
 
@@ -161,13 +161,13 @@ export class ParallelBar extends EventEmitter {
       this.terminal.clearDown() // clear all bars or show final progress
     }
     else {
-      const formatter = this.layout.formatter.bind(this.layout)
+      const format = this.layout.format.bind(this.layout)
       // update each bar
       for (let i = 0; i < this.bars.length; i++) {
         // add new line ?
         // if (i > 0) this.terminal.newline()
         this.bars[i]
-          .render(formatter, this.payloads[i]) // trigger final rendering
+          .render(format, this.payloads[i]) // trigger final rendering
           .stop() // stop
         this.terminal.newline()
       }

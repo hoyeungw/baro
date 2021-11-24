@@ -12,7 +12,7 @@ export class ProgressBar extends Bar {
     super(Config.build(config))
     this.layout = Layout.build(layout)
     this.payload = {}
-    this.formatter = this.layout.formatter.bind(this.layout)
+    this.format = this.layout.format.bind(this.layout)
     this.phrase = ''
     // the update timer
     this.timer = null
@@ -40,7 +40,7 @@ export class ProgressBar extends Bar {
       clearTimeout(this.timer)
       this.timer = null
     }
-    super.render(this.layout.formatter.bind(this.layout), payload) // run internal rendering
+    super.render(this.layout.format.bind(this.layout), payload) // run internal rendering
     if (this.noTTY) this.terminal.newline() // add new line in noTTY mode!
     this.timer = setTimeout(this.render.bind(this, payload), this.interval) // next update
   }

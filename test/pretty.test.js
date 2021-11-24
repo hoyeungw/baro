@@ -25,7 +25,7 @@ const BARO_LAYOUT = {
   char: [ '\u2588', '\u2591' ],
   size: 10,
   autoZero: true,
-  formatter(state) {
+  format(state) {
     const { progress, total, value, payload, eta } = state
     // Xr().state(state |> decoFlat).progress(state.progress) |> logger
     const { start, agent, topic, status } = payload

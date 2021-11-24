@@ -1,14 +1,10 @@
 import { Contractor }                         from '@geia/contractor'
-import { FRESH }                              from '@palett/presets'
-import { ProjectorFactory }                   from '@palett/projector-factory'
 import { deco, decoString, logger, says, Xr } from '@spare/logger'
 import { timeout }                            from '@valjoux/timeout'
 import { time }                               from '@valjoux/timestamp-pretty'
-import { range }         from '@vect/vector-init'
-import { SHADE_CHARSET } from '../resources/chars'
-import { Baro }          from '../src/Baro'
-
-const projectorFactory = ProjectorFactory.fromHEX({ min: 0, max: 1 }, FRESH)
+import { range }                              from '@vect/vector-init'
+import { CHARSET_SHADE }                      from '../resources/charset'
+import { Baro }                               from '../src/Baro'
 
 const BARO_CONFIG = {
   autoClear: false,
@@ -23,7 +19,7 @@ const BARO_CONFIG = {
 
 const BARO_LAYOUT = {
   sentence: ' {bar} {percent}% | ETA: {eta}s | {degree}',
-  char: SHADE_CHARSET,
+  char: CHARSET_SHADE,
   size: 10,
   autoZero: true
 }

@@ -4,13 +4,14 @@ import { ProjectorFactory }            from '@palett/projector-factory'
 import { deco, decoString, ros, says } from '@spare/logger'
 import { timeout }                     from '@valjoux/timeout'
 import { time }                        from '@valjoux/timestamp-pretty'
-import { range }                       from '@vect/vector-init'
-import { SHADE_CHARSET }               from '../resources/chars'
-import { Baro }                        from '../src/Baro'
+import { range }         from '@vect/vector-init'
+import { CHARSET_SHADE } from '../resources/charset'
+import { Baro }          from '../src/Baro'
 import { humanScale }                  from '../util/humanScale'
 import { Spin }                        from '../util/Spin'
 
 const projectorFactory = ProjectorFactory.fromHEX({ min: 0, max: 2 << 20 }, FRESH)
+
 // 2 << 20 = 2097152 = 2 * 1024 * 1024 = 2mb
 
 const BARO_CONFIG = {
@@ -25,7 +26,7 @@ const BARO_CONFIG = {
 }
 
 const LAYOUT_THROBBER = {
-  char: SHADE_CHARSET,
+  char: CHARSET_SHADE,
   size: 12,
   autoZero: true,
   bar(state) {
@@ -33,10 +34,10 @@ const LAYOUT_THROBBER = {
     state.spin = !state.spin ? Spin.build(12, 5, 2) : state.spin.next()
     return state.spin.renderBar(this.chars)
   },
-  formatter(state) {
+  format(state) {
     const { progress, total, value, payload, eta } = state
     const { start, agent, topic, status } = payload
-    const dye = projectorFactory.make(progress)
+    const dye = projectorFactory.make(value)
     const barText = this.bar.call(this, state)
     const bar = dye(barText + ' ' + humanScale(value))
     return `${start} [${ros(agent)}] ${bar} | ${topic}`

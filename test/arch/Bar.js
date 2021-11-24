@@ -18,8 +18,8 @@ export class Bar extends EventEmitter {
   prev
   /** @type {boolean} progress bar active ? */
   active = false
-  /** @type {function} use default formatter or custom one ? */
-  formatter
+  /** @type {function} use default format or custom one ? */
+  format
 
   /** @type {State}  */
   state
@@ -27,7 +27,7 @@ export class Bar extends EventEmitter {
   /**
    *
    * @param {Config} config
-   // * @param {function(status,payload)} formatter
+   // * @param {function(status,payload)} format
    */
   constructor(config) {
     super()
@@ -49,12 +49,12 @@ export class Bar extends EventEmitter {
   get reachedLimit() { return this.state.value >= this.state.total && this.config.autoStop }
 
   // internal render function
-  render(formatter, payload) {
+  render(format, payload) {
     // automatic eta update ? (long running processes)
     if (this.etaConf.autoUpdate) { this.state.calETA?.update(Date.now(), this.state) }
     let phrase // sentence string
     if (
-      this.forceRedraw && ( phrase = formatter(this.state, payload) ) ||
+      this.forceRedraw && ( phrase = format(this.state, payload) ) ||
       this.phrase !== phrase  // string updated ? only trigger redraw on change!
     ) {
       this.emit('redraw-pre')     // trigger event
