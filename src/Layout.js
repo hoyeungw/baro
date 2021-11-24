@@ -14,7 +14,7 @@ export class Layout {
    * @param {boolean}                       [options.autoZero = false]     autoZero - false
    * @param {function(State):string}        [options.bar]
    * @param {function(State):string}        [options.degree]
-   * @param {function(State,object):string} [options.formatter]
+   * @param {function(State,object):string} [options.format]
    */
   constructor(options) {
     const char = typeof options.char === STR ? [ options.char, ' ' ] : Array.isArray(options.char) ? options.char : [ '=', '-' ]
@@ -26,16 +26,11 @@ export class Layout {
     this.sentence = options.sentence ?? DEFAULT_SENTENCE
     if (options.bar) this.bar = options.bar.bind(this)
     if (options.degree) this.degree = options.degree.bind(this)
-    if (options.formatter) this.formatter = options.formatter.bind(this)
+    if (options.format) this.format = options.format.bind(this)
   }
 
   static build(options) {
     return new Layout(options)
-  }
-
-  loadFormatter(formatter) {
-    this.formatter = formatter.bind(this)
-    return this
   }
 
   bar(state) {
@@ -73,7 +68,7 @@ export class Layout {
    * @param {State|object} state
    * @returns {string}
    */
-  formatter(state) {
+  format(state) {
     return this.sentence?.replace(/\{(\w+)\}/g, (match, key) => {
       if (key === 'bar') return this.bar(state)
       if (key === 'degree') return this.degree(state)
