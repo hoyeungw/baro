@@ -1,6 +1,7 @@
 import { constraint, round } from '@aryth/math'
 import { valid }             from '@typen/nullish'
 import { ETA }               from '../util/ETA'
+import { pad3 }              from '../util/humanScale'
 
 export class State {
   constructor(total, value, payload, eta) {
@@ -52,5 +53,5 @@ export class State {
 
   get elapsed() { return round(( ( this.end ?? Date.now() ) - this.start ) / 1000) }
 
-  get percent() { return ~~( this.progress * 100 ) }
+  get percent() { return pad3('' + ~~( this.progress * 100 )) }
 }
