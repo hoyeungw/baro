@@ -22,7 +22,7 @@ export class Escape {
   }
 
   stop() {
-    clearTimeout(this.timer)
+    clearInterval(this.timer)
     return this.timer = null
   }
 }
