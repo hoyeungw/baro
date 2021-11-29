@@ -56,15 +56,12 @@ export class Baro {
 
   /**
    * add a new bar to the stack
-   * @param total
-   * @param value
-   * @param payload
-   * @returns {State}
+   * @param {State|object} state // const state = new State(total, value, this.config.eta)
+   * @returns {State|object}
    */
-  create(total, value, payload) {
+  append(state) {
     // progress updates are only visible in TTY mode!
     if (this.noTTY) return void 0
-    const state = new State(total, value, payload, this.config.eta)
     state.last = Number.NEGATIVE_INFINITY
     this.states.push(state)
     if (!this.escape.active && this.states.length) this.boot()
@@ -90,21 +87,24 @@ export class Baro {
       this.terminal.clearDown()
     } // clear all bars or show final progress
     else {
-      for (let state of this.states) { state.stop() }
+      // for (let state of this.states) { state.stop() }
       this.#renderStates(this.states)
     }
   }
 
   #renderStates(states) {
     this.terminal.resetCursor() // reset cursor
-    for (let i = 0, hi = states.length; i < hi; i++) {
+    // if (this.terminal.excessive) { this.terminal.write(`${CSI}2;${this.terminal.height - 1}${DECSTBM}`) }
+    const max = this.terminal.height
+    for (let hi = states.length, i = hi > max ? hi - max + 1 : 0; i < hi; i++) {
       const state = states[i] // update each bar
       if (this.forceRedraw || ( state.value !== state.last )) {
         this.terminal.cleanWrite(this.layout.format(state))
+        state.last = state.value
       } // string updated, only trigger redraw on change
       this.terminal.newline()
-      state.last = state.value
     }
+    // if (this.terminal.excessive) { this.terminal.write(`${CSI}${DECSTBM}`) }
     if (this.noTTY) {
       this.terminal.newline()
       this.terminal.newline()
