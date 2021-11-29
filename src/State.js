@@ -4,30 +4,26 @@ import { ETA }               from '../util/ETA'
 import { pad3 }              from '../util/humanScale'
 
 export class State {
-  constructor(total, value, payload, eta) {
-    this.value = value ?? 0
-    this.total = total ?? 100
-    this.start = Date.now() // store start time for duration+eta calculation
-    this.end = null // reset stop time for 're-start' scenario (used for duration calculation)
-    this.calETA = eta
-      ? new ETA(eta.capacity ?? 64, this.start, this.value)
+  constructor(data) {
+    this.value = data.value ?? 0
+    this.total = data.total ?? 100
+    this.start = data.start ?? Date.now() // store start time for duration+eta calculation
+    this.end = data.end ?? null // reset stop time for 're-start' scenario (used for duration calculation)
+    this.calETA = data.eta
+      ? new ETA(data.eta.capacity ?? 64, this.start, this.value)
       : null // initialize eta buffer
-    this.payload = payload ?? {}
     return this
   }
 
-  static build(values) {
-    const { total, value, payload, eta } = values
-    return new State(total, value, payload, eta)
-  }
+  static build(data) { return new State(data) }
 
-  initialize(total, value, payload, eta) {
-    return Object.assign(this, new State(total, value, payload, eta))
-  }
-
-  get eta() { return this.calETA.eta }
+  get eta() { return this.calETA?.estimate }
 
   get reachLimit() { return this.value >= this.total }
+
+  get elapsed() { return round(( ( this.end ?? Date.now() ) - this.start ) / 1000) }
+
+  get percent() { return pad3('' + ~~( this.progress * 100 )) }
 
   get progress() {
     const progress = ( this.value / this.total )
@@ -36,22 +32,17 @@ export class State {
       : constraint(progress, 0, 1)
   }
 
-  update(value, payload) {
-    // if (payload) for (let key in payload) this[key] = payload[key]
-    this.value = value
-    if (payload) this.payload = payload
-    this.calETA?.update(Date.now(), this) // add new value; recalculate eta
-    if (this.reachLimit) this.end = Date.now()
+  update(value) {
+    if (valid(value)) this.value = value
+    this.now = Date.now()
+    this.calETA?.update(this) // add new value; recalculate eta
+    if (this.reachLimit) this.end = this.now
     return this
   }
 
-  stop(value, payload) {
-    this.end = Date.now()
+  stop(value) {
     if (valid(value)) this.value = value
-    if (payload) this.payload = payload
+    this.end = Date.now()
+    return this
   }
-
-  get elapsed() { return round(( ( this.end ?? Date.now() ) - this.start ) / 1000) }
-
-  get percent() { return pad3('' + ~~( this.progress * 100 )) }
 }
