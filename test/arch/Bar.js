@@ -27,7 +27,7 @@ export class Bar extends EventEmitter {
   /**
    *
    * @param {Config} config
-   // * @param {function(status,payload)} format
+   // * @param {function(code,payload)} format
    */
   constructor(config) {
     super()

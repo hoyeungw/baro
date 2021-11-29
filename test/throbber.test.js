@@ -3,10 +3,10 @@ import { FRESH }                       from '@palett/presets'
 import { ProjectorFactory }            from '@palett/projector-factory'
 import { deco, decoString, ros, says } from '@spare/logger'
 import { timeout }                     from '@valjoux/timeout'
-import { time }                        from '@valjoux/timestamp-pretty'
-import { range }         from '@vect/vector-init'
-import { CHARSET_SHADE } from '../resources/charset'
-import { Baro }          from '../src/Baro'
+import { range }                       from '@vect/vector-init'
+import { CHARSET_SHADE }               from '../resources/charset'
+import { Baro }                        from '../src/Baro'
+import { State }                       from '../src/State'
 import { humanScale }                  from '../util/humanScale'
 import { Spin }                        from '../util/Spin'
 
@@ -35,8 +35,7 @@ const LAYOUT_THROBBER = {
     return state.spin.renderBar(this.chars)
   },
   format(state) {
-    const { progress, total, value, payload, eta } = state
-    const { start, agent, topic, status } = payload
+    const { progress, total, value, eta, start, agent, topic, code } = state
     const dye = projectorFactory.make(value)
     const barText = this.bar.call(this, state)
     const bar = dye(barText + ' ' + humanScale(value))
@@ -49,34 +48,33 @@ const baro = Baro.build(BARO_CONFIG, LAYOUT_THROBBER)
 const test = async () => {
   const service = async function (params) {
     const { agent } = this
-    const { status, delay, topic, size, } = params
-    const start = time()
-    const payload = { start, agent, topic, delay, status }
-    const state = baro.create(size, 0, payload)
-    await timeout(delay)
-    if (status === 404) {
+    const state = baro.append(State.build({ start: Date.now(), total: params.size, value: 0, eta: { capacity: 48 } }))
+    state.agent = agent
+    Object.assign(state, params)
+    await timeout(params.delay)
+    if (params.code === 404) {
       // baro.remove(state)
-      return payload
+      return state
     }
     for (const i of range(0, 11)) {
       await timeout(200)
-      state.update(i * size / 10, payload)
+      state.update(i * state.size / 10)
     }
     state.done = true
     state.stop()
     // state.spin.logs |> decoMatrix |> says['state-logs']
-    return payload
+    return state
   }
   const contractor = Contractor.build(service, [ { agent: '006' }, { agent: '007' }, { agent: '008' } ])
   const jobs = [
-    { status: 200, topic: 'foo', size: 1280000, delay: 0 },
-    { status: 200, topic: 'bar', size: 1440000, delay: 400 },
-    { status: 200, topic: 'zen', size: 960000, delay: 800 },
-    { status: 200, topic: 'voo', size: 1080000, delay: 300 },
-    { status: 404, topic: 'sha', size: 720000, delay: 400 },
-    { status: 200, topic: 'mia', size: 840000, delay: 500 },
-    { status: 404, topic: 'fau', size: 1960000, delay: 200 },
-    { status: 200, topic: 'ion', size: 1600000, delay: 100 },
+    { code: 200, topic: 'foo', size: 1280000, delay: 0 },
+    { code: 200, topic: 'bar', size: 1440000, delay: 400 },
+    { code: 200, topic: 'zen', size: 960000, delay: 800 },
+    { code: 200, topic: 'voo', size: 1080000, delay: 300 },
+    { code: 404, topic: 'sha', size: 720000, delay: 400 },
+    { code: 200, topic: 'mia', size: 840000, delay: 500 },
+    { code: 404, topic: 'fau', size: 1960000, delay: 200 },
+    { code: 200, topic: 'ion', size: 1600000, delay: 100 },
   ]
   '>> connecting' |> says['throbber-test']
   const results = await contractor.takeOrders(jobs)
