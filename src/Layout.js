@@ -49,7 +49,7 @@ export class Layout {
 
   degree(state) {
     let { value, total } = state
-    const { base3 = true, decimal = true } = this
+    const { base3 = true, decimal = false } = this
     if (!base3) return `${round(value)}/${total}`
     const thousand = decimal ? 1000 : 1024
     let base3Level = 0
@@ -58,10 +58,10 @@ export class Layout {
       value /= thousand
       base3Level++
     }
-    const totalText = trailZero(total)
-    const valueText = trailZero(value).padStart(totalText.length)
+    const t = trailZero(total)
+    const v = trailZero(value).padStart(t.length)
     // return { value: valueText, total: totalText, scale: base3ToScale(base3, dec) }
-    return `${valueText}/${totalText} ${base3ToScale(base3Level, decimal)}`
+    return `${v}/${t} ${base3ToScale(base3Level, decimal)}`
   }
   /**
    *
@@ -73,8 +73,6 @@ export class Layout {
       if (key === 'bar') return this.bar(state)
       if (key === 'degree') return this.degree(state)
       if (key in state) return state[key]
-      const payload = state.payload
-      if (payload && key in payload) return payload[key]
       return match
     })
   }
