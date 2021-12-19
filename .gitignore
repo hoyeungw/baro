@@ -1,7 +1,14 @@
 .idea
-yarn.lock
 archive
 dist
 node_modules
 #src
 #test
+.yarn/*
+#!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+yarn.lock
