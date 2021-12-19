@@ -79,4 +79,4 @@ After cursor is resettet to initial position. After the bar elements are rendere
 ### evt::update-post ###
 
 Triggered when `update()` is called.
-After cursor is resettet to initial position. After the bar elements are rendered. After newline spacing is added in no-tty mode.
+After cursor is resettet to initial position. After the bar elements are rendered. After nextLine spacing is added in no-tty mode.
