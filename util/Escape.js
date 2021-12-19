@@ -1,5 +1,4 @@
-import { OBJ }   from '@typen/enum-data-types'
-import { valid } from '@typen/nullish'
+import { setInterval } from 'timers/promises'
 
 export class Escape {
   constructor(conf) {
@@ -7,23 +6,23 @@ export class Escape {
     this.arg = conf.arg ?? null
     this.fn = conf.fn.bind(this.ctx, this.arg)
     this.instant = conf.instant ?? true
-    this.timer = null
+    this.on = false
   }
 
   static build(conf) { return new Escape(conf) }
 
-  get active() { return valid(this.timer) }
+  get active() { return this.on }
 
-  loop(ms) {
-    if (typeof this.timer === OBJ) this.stop()
+  async loop(ms) {
+    this.on = true
     if (!this.fn) return void 0
     if (this.instant) this.fn()
-    this.timer = setInterval(this.fn, ms)
+    for await (const _ of setInterval(ms)) {
+      if (!this.on) break
+      await this.fn()
+    }
   }
 
-  stop() {
-    clearInterval(this.timer)
-    return this.timer = null
-  }
+  stop() { return this.on = false }
 }
 
