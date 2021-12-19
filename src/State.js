@@ -1,7 +1,7 @@
 import { constraint, round } from '@aryth/math'
 import { valid }             from '@typen/nullish'
-import { ETA }               from '../util/ETA'
-import { pad3 }              from '../util/humanScale'
+import { ETA }               from '../util/ETA.js'
+import { pad3 }              from '../util/humanScale.js'
 
 export class State {
   constructor(data) {

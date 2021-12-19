@@ -1,6 +1,6 @@
 import { round }                   from '@aryth/math'
 import { STR }                     from '@typen/enum-data-types'
-import { base3ToScale, trailZero } from '../util/humanScale'
+import { base3ToScale, trailZero } from '../util/humanScale.js'
 
 const DEFAULT_SENTENCE = 'progress [{bar}] {progress}% | ETA: {eta}s | {value}/{total}'
 
