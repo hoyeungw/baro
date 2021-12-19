@@ -1,8 +1,8 @@
 import { NUM }      from '@typen/enum-data-types'
 import EventEmitter from 'events'
 import { Config }   from '../../src/Config'
-import { State }    from '../../src/State'
-import { Terminal } from '../../util/Terminal'
+import { State } from '../../src/State'
+import { IO }    from '../../util/IO'
 
 // Progress-Baro constructor
 export class Bar extends EventEmitter {
@@ -10,7 +10,7 @@ export class Bar extends EventEmitter {
   config
   /** @type {object} payload data */
   payload = {}
-  /** @type {Terminal|object} store terminal instance */
+  /** @type {IO|object} store terminal instance */
   terminal
   /** @type {?string} last drawn string - only render on change! */
   phrase = null
@@ -33,7 +33,7 @@ export class Bar extends EventEmitter {
     super()
     this.config = config
     this.etaConf = config.eta
-    this.terminal = this.config.terminal ?? new Terminal(this.config)
+    this.terminal = this.config.terminal ?? new IO(this.config)
     this.prev = Date.now()
     this.state = State.build({ value: 0, total: 100, start: null, end: null, eta: null })
   }

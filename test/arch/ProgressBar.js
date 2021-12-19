@@ -41,7 +41,7 @@ export class ProgressBar extends Bar {
       this.timer = null
     }
     super.render(this.layout.format.bind(this.layout), payload) // run internal rendering
-    if (this.noTTY) this.terminal.newline() // add new line in noTTY mode!
+    if (this.noTTY) this.terminal.nextLine() // add new line in noTTY mode!
     this.timer = setTimeout(this.render.bind(this, payload), this.interval) // next update
   }
 
@@ -104,7 +104,7 @@ export class ProgressBar extends Bar {
     }
     else {
       // new line on complete
-      this.terminal.newline()
+      this.terminal.nextLine()
     }
   }
 }

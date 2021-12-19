@@ -26,12 +26,12 @@ const test = async () => {
   // stream.write(`${CSI}H`) // ${CSI}H
   stream.write(`${CSI}${DECSTBM}`)
 
-  let dy = hi, i = 0
+  let offset = hi, i = 0
 
   // stream.write(`${CSI}${9}${CUD}`)
 
 
-  // while(dy>hi){
+  // while(offset>hi){
   //
   // }
   // stream.write(`${CSI}${stream.rows}${CPL}`)
@@ -48,9 +48,9 @@ const test = async () => {
   // stream.write(`${CSI}${stream.rows}${SU}`)
   // stream.write(`${CSI}${stream.rows}${CUU}`)
   // stream.write(`${CSI}${2}${ED}`)
-  // console.log(`>> scroll-up (${i++}) [dy] ${dy} [screen.h] ${stream.rows}`)
+  // console.log(`>> scroll-up (${i++}) [offset] ${offset} [screen.h] ${stream.rows}`)
   // console.log('>> mark')
-  // rl.moveCursor(stream, 0, -dy)
+  // rl.moveCursor(stream, 0, -offset)
 }
 
 test()

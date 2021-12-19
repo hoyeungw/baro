@@ -1,9 +1,9 @@
 import { Deco, says } from '@spare/logger'
 import EventEmitter   from 'events'
 import { Config }     from '../../src/Config'
-import { Layout }     from '../../src/Layout'
-import { Terminal }   from '../../util/Terminal'
-import { Bar }        from './Bar'
+import { Layout } from '../../src/Layout'
+import { IO }     from '../../util/IO'
+import { Bar }    from './Bar'
 // Progress-Baro constructor
 export class ParallelBar extends EventEmitter {
 
@@ -27,7 +27,7 @@ export class ParallelBar extends EventEmitter {
     // this.config.stream |> Deco({ depth: 1 })  |> logger
 
     // store terminal instance
-    this.terminal = this.config.terminal ?? new Terminal(this.config)
+    this.terminal = this.config.terminal ?? new IO(this.config)
 
     // the update timer
     this.timer = null
@@ -86,7 +86,7 @@ export class ParallelBar extends EventEmitter {
     // force update
     this.update()
     // clear bottom
-    this.terminal.newline()
+    this.terminal.nextLine()
     this.terminal.clearDown()
     return true
   }
@@ -112,7 +112,7 @@ export class ParallelBar extends EventEmitter {
     // update each bar
     for (let i = 0; i < this.bars.length; i++) {
       this.bars[i].render(format, this.payloads[i])
-      this.terminal.newline()
+      this.terminal.nextLine()
     }
 
     // trigger event
@@ -120,8 +120,8 @@ export class ParallelBar extends EventEmitter {
 
     // add new line in noTTY mode
     if (this.config.noTTYOutput && this.terminal.isTTY === false) {
-      this.terminal.newline()
-      this.terminal.newline()
+      this.terminal.nextLine()
+      this.terminal.nextLine()
     }
 
     // next update
@@ -165,15 +165,15 @@ export class ParallelBar extends EventEmitter {
       // update each bar
       for (let i = 0; i < this.bars.length; i++) {
         // add new line ?
-        // if (i > 0) this.terminal.newline()
+        // if (i > 0) this.terminal.nextLine()
         this.bars[i]
           .render(format, this.payloads[i]) // trigger final rendering
           .stop() // stop
-        this.terminal.newline()
+        this.terminal.nextLine()
       }
 
       // new line on complete
-      // this.terminal.newline()
+      // this.terminal.nextLine()
     }
 
     // trigger event
