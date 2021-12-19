@@ -123,7 +123,8 @@ export class Baro {
     if (height) {
       for (const state of states.slice(-( height ))) {
         if (this.forceRedraw || ( state.value !== state.last )) {
-          io.writeOff(`CURSOR (${x}, ${y}) OFFSET (${this.offset}) TERM (${io.size}) ` + this.layout.format(state))
+          // `CURSOR (${x}, ${y}) OFFSET (${this.offset}) TERM (${io.size}) ` +
+          io.writeOff(this.layout.format(state))
           state.last = state.value
         }
         io.nextLine()
