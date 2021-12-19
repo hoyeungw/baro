@@ -1,6 +1,6 @@
 {
   "name": "baro",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "a command-line progress-bar",
   "type": "module",
   "main": "dist/index.cjs",
@@ -8,6 +8,9 @@
     "import": "./dist/index.js",
     "require": "./dist/index.cjs"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "upint": "yarn upgrade-interactive",
     "build": "rollup -c rollup.config.js",
