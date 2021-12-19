@@ -3,9 +3,10 @@ export class Config {
    *
    * @param {object} config
    *
-   * @param {WriteStream}  [config.stream = process.stderr] the output stream to write on
+   * @param {ReadStream}   [config.input = process.stdin]   the output stream to read from
+   * @param {WriteStream}  [config.output = process.stdout] the output stream to write on
    * @param {number}       [config.fps = 12]                the max update rate in fps (redraw will only triggered on value change)
-   * @param {Terminal|any} [config.terminal = null]         external terminal provided ?
+   * @param {IO|any}       [config.terminal = null]         external terminal provided ?
    * @param {boolean}      [config.autoClear = false]       clear on finish ?
    * @param {boolean}      [config.autoStop = false]        stop on finish ?
    * @param {boolean}      [config.hideCursor = false]      hide the cursor ?
@@ -31,7 +32,8 @@ export class Config {
     this.throttle = 1000 / ( config.fps ?? 10 )
 
     // the output stream to write on
-    this.stream = config.stream ?? process.stderr
+    this.output = config.output ?? process.stdout
+    this.input = config.input ?? process.stdin
 
     this.eta = config.eta
       ? {
@@ -43,7 +45,7 @@ export class Config {
     this.terminal = config.terminal ?? null // external terminal provided ?
     this.autoClear = config.autoClear ?? false // clear on finish ?
     this.autoStop = config.autoStop ?? false // stop on finish ?
-    this.hideCursor = config.hideCursor ?? false // hide the cursor ?
+    this.hideCursor = config.hideCursor ?? true // hide the cursor ?
     this.lineWrap = config.lineWrap ?? false // disable setLineWrap ?
 
     this.syncUpdate = config.syncUpdate ?? true // allow synchronous updates ?
