@@ -33,7 +33,7 @@ npm manifest:
     ],
     "scripts": {
       "upint": "yarn upgrade-interactive --latest",
-      "build": "rollup -c rollup.config.js",
+      "build": "rollup -c rollup.config.mjs",
       "test": "node -r @babel/register ./test/pretty.test.js"
     },
     "dependencies": {

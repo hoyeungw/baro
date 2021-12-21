@@ -1,4 +1,4 @@
-import { cursor, decset }                    from '@arpel/escape'
+import { clear, cursor, decset }             from '@arpel/escape'
 import { EXIT }                              from '@geia/enum-events'
 import { FRESH }                             from '@palett/presets'
 import { ProjectorFactory }                  from '@palett/projector-factory'
@@ -48,16 +48,17 @@ const BARO_LAYOUT = {
     const degreeText = this.degree.call(this, state)
     const bar = dye(barText + ' ' + degreeText)
     if (value < total) {
-      return `${time()} $[${ros(agent)}] [${code}] ${bar} | eta ${eta} | ${author} | ${work}`
+      return `${time()} [${ros(agent)}] [${code}] ${bar} | eta ${eta} | ${author} | ${work}`
     }
     else {
-      return `${time()} $[${ros(agent)}] [${code}] ${bar} | ${author} | ${work}`
+      return `${time()} [${ros(agent)}] [${code}] ${bar} | ${author} | ${work}`
     }
   },
 }
 
 
 const test = async () => {
+  process.stdout.write(clear.ENTIRE_SCREEN + cursor.goto(0, 0))
   logger(Xr()['process.stdout.isTTY'](process.stdout.isTTY))
   // multiBar.config |> Deco({depth:1}) |> logger
   const baro = Baro.build(BARO_CONFIG, BARO_LAYOUT)

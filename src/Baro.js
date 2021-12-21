@@ -1,4 +1,3 @@
-import { cursor } from '@arpel/escape'
 import { Escape } from '../util/Escape.js'
 import { IO }     from '../util/IO.js'
 import { Config } from './Config.js'
@@ -46,8 +45,8 @@ export class Baro {
     if (this.config.hideCursor) io.showCursor(false) // hide the cursor ?
     if (!this.config.lineWrap) io.setLineWrap(false) // disable line wrapping ?
     // this.io.output.write('\f')
-    const height = this.io.height
-    this.io.output.write(cursor.nextLine(height) + cursor.prevLine(height))
+    // const height = this.io.height
+    // this.io.output.write(cursor.nextLine(height) + cursor.prevLine(height))
     // this.io.output.write(scroll.down(height))
 
     // const [ x, y ] = await io.asyncCursorPos()
@@ -58,7 +57,7 @@ export class Baro {
     // }
 
     // WARNING: intentionally call loop without await
-    this.escape.loop(this.config.throttle) // initialize update timer
+    Promise.resolve().then(() => this.escape.loop(this.config.throttle)) // initialize update timer
   }
 
   /**
@@ -101,23 +100,13 @@ export class Baro {
       // for (let state of this.states) { state.stop() }
       await this.#renderStates(this.states)
     }
-
     this.io.input.pause()
   }
 
   async #renderStates(states) {
     const { io } = this
     const height = io.height - 1
-    const [ x, y ] = await io.asyncCursorPos()
-    // if (!this.busy && ( x + states.length > height )) {
-    //   io.nextPage()
-    //   this.offset = 0
-    // }
-    // else {
-    //   this.busy = true
-    //
-    // }
-
+    // const [ x, y ] = await io.asyncCursorPos()
     io.offsetLines(-Math.min(this.offset, height)) // reset cursor
     this.offset = 0
     if (height) {

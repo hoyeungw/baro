@@ -3,8 +3,6 @@ import { clear, cursor, decset } from '@arpel/escape'
 import { LF }                    from '@pres/enum-control-chars'
 import * as rl                   from 'readline'
 
-const ARPEL_IO = ArpelIO.build({})
-
 export class IO extends ArpelIO {
   /** @type {boolean} line wrapping enabled */
   lineWrap = true
