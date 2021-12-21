@@ -15,7 +15,6 @@ export class Baro {
     arg: this.states
   })
   #locker = null
-  offset = 0
   /**
    *
    * @param {Config} config
@@ -50,7 +49,7 @@ export class Baro {
     // this.io.output.write(scroll.down(height))
 
     // const [ x, y ] = await io.asyncCursorPos()
-    // console.log('x', x, 'y', y, 'offset', this.offset, 'states', this.states.length, 'height', io.height)
+    // console.log('x', x, 'y', y, 'offset', io.offset, 'states', this.states.length, 'height', io.height)
     // if (x + this.states.length >= io.height) {
     //   io.output.write('\f')
     //   // io.nextPage()
@@ -107,17 +106,16 @@ export class Baro {
     const { io } = this
     const height = io.height - 1
     // const [ x, y ] = await io.asyncCursorPos()
-    io.offsetLines(-Math.min(this.offset, height)) // reset cursor
-    this.offset = 0
+    io.offsetLines(-Math.min(io.offset, height)) // reset cursor
+    io.offset = 0
     if (height) {
       for (const state of states.slice(-( height ))) {
         if (this.forceRedraw || ( state.value !== state.last )) {
-          // `CURSOR (${x}, ${y}) OFFSET (${this.offset}) TERM (${io.size}) ` +
+          // `CURSOR (${x}, ${y}) OFFSET (${io.offset}) TERM (${io.size}) ` +
           io.writeOff(this.layout.format(state))
           state.last = state.value
         }
         io.nextLine()
-        this.offset++
       }
     }
     if (this.config.autoStop && states.every(state => state.reachLimit)) {

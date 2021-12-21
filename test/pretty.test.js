@@ -58,16 +58,16 @@ const BARO_LAYOUT = {
 
 
 const test = async () => {
-  process.stdout.write(clear.ENTIRE_SCREEN + cursor.goto(0, 0))
-  logger(Xr()['process.stdout.isTTY'](process.stdout.isTTY))
   // multiBar.config |> Deco({depth:1}) |> logger
   const baro = Baro.build(BARO_CONFIG, BARO_LAYOUT)
   const service = async function (params) {
     const { agent } = this
-    const state = State.build({ total: params.size, value: 0, eta: { capacity: 48 } })
-    state.agent = agent
+    const state = Object.assign(
+      State.build({ total: params.size, value: 0, eta: { capacity: 48 } }),
+      { agent },
+      params
+    )
     await baro.append(state) // start: Date.now(),
-    Object.assign(state, params)
     await timeout(state.delay)
     if (state.code === 404) {
       state.done = false
@@ -110,6 +110,8 @@ const test = async () => {
     // { code: 404, size: 1960000, delay: 200, author: 'Maupassant', work: 'La Parure', },
     // { code: 200, size: 1600000, delay: 100, author: 'Maupassant', work: 'Butterball ', },
   ]
+  process.stdout.write(clear.ENTIRE_SCREEN + cursor.goto(0, 0))
+  logger(Xr()['process.stdout.isTTY'](process.stdout.isTTY))
   const results = await contractor.takeOrders(jobs)
   await baro.stop()
   // await timeout(100)

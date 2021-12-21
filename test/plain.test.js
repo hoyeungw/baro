@@ -1,10 +1,10 @@
-import { Contractor }                                      from '@geia/contractor'
-import { deco, decoSamples, decoString, logger, says, Xr } from '@spare/logger'
-import { timeout }                                         from '@valjoux/timeout'
-import { range }                                           from '@vect/vector-init'
-import { CHARSET_SHADE }                                   from '../resources/charset'
-import { Baro }                                            from '../src/Baro'
-import { State }                                           from '../src/State'
+import { Contractor }                         from '@geia/contractor'
+import { deco, decoString, logger, says, Xr } from '@spare/logger'
+import { timeout }                            from '@valjoux/timeout'
+import { range }                              from '@vect/vector-init'
+import { CHARSET_SHADE }                      from '../resources/charset.js'
+import { Baro }                               from '../src/Baro.js'
+import { State }                              from '../src/State.js'
 
 const BARO_CONFIG = {
   autoClear: false,
@@ -27,11 +27,12 @@ const BARO_LAYOUT = {
 const baro = Baro.build(BARO_CONFIG, BARO_LAYOUT)
 
 const test = async () => {
-  Xr()['process.stdout.isTTY'](process.stdout.isTTY) |> logger
+  logger(Xr()['process.stdout.isTTY'](process.stdout.isTTY))
   // multiBar.config |> Deco({depth:1}) |> logger
   const service = async function (params) {
-    const state = baro.append(State.build({ total: params.size, value: 0, start: Date.now(), eta: { capacity: 48 } }))
+    const state = State.build({ total: params.size, value: 0, start: Date.now(), eta: { capacity: 48 } })
     Object.assign(state, params)
+    await baro.append(state)
     await timeout(state.delay)
     if (state.code === 404) {
       // baro.remove(state)
@@ -61,8 +62,8 @@ const test = async () => {
   const results = await contractor.takeOrders(jobs)
   baro.stop()
   // await timeout(100)
-  results |> deco |> says['Q'].p('mission accomplished')
-  'well done' |> decoString |> says['M']
+  says['Q'].p('mission accomplished')(deco(results))
+  says['M'](decoString('well done'))
 
 }
 

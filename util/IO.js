@@ -55,7 +55,8 @@ export class IO extends ArpelIO {
   }
 
   offsetLines(offset) {
-    const cursorMovement = offset >= 0 ? cursor.down(offset) : cursor.up(-offset)
+    if (offset === 0) return
+    const cursorMovement = offset >= 0 ? cursor.down(offset) : cursor.up(-( offset ))
     this.output.write(cursorMovement + cursor.charTo(0))
     // rl.moveCursor(this.output, -this.width, offset) // move cursor to initial line // rl.cursorTo(this.stream, 0, null) // first char
   }
